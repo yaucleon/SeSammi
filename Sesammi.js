@@ -10,27 +10,19 @@ console.log("Connected as " + client.user.tag);
 
 })
 
-client.on('message', (message) => {
-    //Prevents responding to self messages
-    if (message.author == client.user) {
-return;
-    } 
-    
-    message.channel.send("Message received: " + message.content);
-    
-})
-
-
-
-
 
 client.on('message', (message) => {
-    if (message.author == client.user) { // Prevent bot from responding to its own messages
+    try {
+    if (message.author == client.user || message.author.bot) { // Prevent bot from responding to its own / other bot messages
         return
     }
 
     if (message.content.startsWith(".")) {
         processCommand(message);
+    }
+    }
+    catch (error) {
+        console.log(error);
     }
 })
 //Handles commands
@@ -104,7 +96,7 @@ function helpCommand(arguments, message) {
     if (arguments.length > 0) {
         message.channel.send("It looks like you might need help with " + arguments);
     } else {
-        message.channel.send("I'm not sure what you need help with. Try !help [topic]");
+        message.channel.send("I'm not sure what you need help with. Try .help [topic]");
     }
 }
 //Join voice channel
